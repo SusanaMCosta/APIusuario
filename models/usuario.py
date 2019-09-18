@@ -6,7 +6,7 @@ class UserModel(banco.Model):
     id_user = banco.Column(banco.Integer, primary_key=True)
     nome = banco.Column(banco.String(40))
     matricula = banco.Column(banco.Integer)
-    email = banco.Column(banco.String(40))
+    email = banco.Column(banco.String(40), unique=True)
     senha = banco.Column(banco.String(40))
     curso = banco.Column(banco.Integer)
 
@@ -23,7 +23,7 @@ class UserModel(banco.Model):
             'nome': self.nome,
             'matricula': self.matricula,
             'email': self.email,
-            'senha': self.senha,
+            'senha': self.senha, #futuramente tirar esse atributo de impressão
             'curso': self.curso
             }
 
@@ -35,8 +35,8 @@ class UserModel(banco.Model):
         return None
 
     @classmethod
-    def find_by_login(cls, email):
-        user = cls.query.filter_by(email=email).first()
+    def find_by_id_user(cls, id_user):
+        user = cls.query.filter_by(id_user=id_user).first()
         if user:
             return user
         return None
@@ -48,3 +48,10 @@ class UserModel(banco.Model):
     def delete_user(self):
         banco.session.delete(self)
         banco.session.commit()
+
+    def update_user(self, nome, matricula, email, senha, curso):
+        self.nome = nome
+        self.matricula = matricula
+        self.email = email
+        self.senha = senha
+        self.curso = curso
