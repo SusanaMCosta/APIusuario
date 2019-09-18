@@ -60,10 +60,11 @@ class UserRegister(Resource):
 
 class UserLogin(Resource):
 
+    #atualmente estou com problema aqui!!!
     @classmethod
     def post(cls):
         dados = atributos.parse_args()
-
+        #dados = RequestParser.parse_args()
         user = UserModel.find_user(dados['email'])
 
         if user and safe_str_cmp(user.senha,dados['senha']):
