@@ -1,5 +1,6 @@
 from flask_restful import Resource, reqparse
 from models.usuario import UserModel
+from flask import request, jsonify
 import sqlite3
 
 class Users(Resource):
@@ -63,8 +64,9 @@ class UserLogin(Resource):
     #atualmente estou com problema aqui!!!
     @classmethod
     def post(cls):
-        dados = atributos.parse_args()
-        #dados = RequestParser.parse_args()
+    #   dados = atributos.parse_args()
+        dados = request.get_json()
+
         user = UserModel.find_user(dados['email'])
 
         if user and safe_str_cmp(user.senha,dados['senha']):
@@ -77,17 +79,3 @@ class UserLogout(Resource):
         jwt_id = get_raw_jwt()['jti']
         BLACKLIST.add(jwt_id)
         return {'message':'logout com sucesso'}, 200
-
-'''
-    def put(self, id_usuario):
-
-        dados = Usuario.argumentos.parse_args()
-        novo_usuario = {'id_usuario':id_usuario, **dados}
-
-        usuario = Usuario.encontre_usuario(id_usuario)
-        if usuario:
-            usuario.update(novo_usuario)
-            return novo_usuario, 200
-        usuarios.append(novo_usuario)
-        return novo_usuario, 201
-'''
